@@ -5,6 +5,7 @@ from django.db import models
 
 
 class CustomUserManager(BaseUserManager):
+    """Класс менеджера кастомной модели пользователя."""
 
     def create_user(self, email, password):
         if email is None:
@@ -20,11 +21,14 @@ class CustomUserManager(BaseUserManager):
         user = self.create_user(email, password)
         user.is_superuser = True
         user.is_staff = True
+        user.is_active = True
         user.save()
         return user
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+    """Кастомная модель пользователя."""
+
     first_name = models.CharField(
         verbose_name='Имя',
         max_length=150,
@@ -62,7 +66,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
     is_active = models.BooleanField(
         verbose_name='Статус активности пользователя',
-        default=True
+        default=False
     )
 
     USERNAME_FIELD = 'email'
@@ -70,15 +74,31 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     def get_full_name(self):
-        """
-        Return the first_name plus the last_name, with a space in between.
+        """Возвращает ФИО пользователя.
+
+        Возвращает значения полей first_name, last_name, middle_name,
+        разделенные пробелами.
         """
         return f'{self.last_name} {self.first_name} {self.middle_name}'
 
     def get_short_name(self):
-        """Return the short name for the user."""
+        """Возвращает значение поля first_name для выбранного пользователя."""
         return self.first_name
 
     def email_user(self, subject, message, from_email=None, **kwargs):
-        """Send an email to this user."""
+        """Отправляет email выбранному пользователю."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+
+class EmailConfirmation(models.Model):
+    """Модель хранения данных для проверки валидности ссылки-подтверждения."""
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    token = models.CharField(
+        verbose_name='Токен верификации почты',
+        max_length=25
+    )
+    created_at = models.DateField(
+        verbose_name='Дата создания',
+        auto_now_add=True
+    )

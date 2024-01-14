@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (TokenBlacklistView,
                                             TokenObtainPairView,
                                             TokenRefreshView)
 
-from .views import UserViewSet
+from .views import EmailConfirmationView, UserViewSet
 
 router = DefaultRouter()
 router.register('users', UserViewSet, basename='users')
@@ -17,5 +17,10 @@ urlpatterns = [
     ),
     path(
         'v1/token/logout/', TokenBlacklistView.as_view(), name='token_logout'
+    ),
+    path(
+        'v1/confirm/<str:uidb64>/<str:token>/',
+        EmailConfirmationView.as_view(),
+        name='email_confirmation'
     ),
 ]
