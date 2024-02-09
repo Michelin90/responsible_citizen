@@ -1,5 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from users.models import CustomUser
+from plans.models import Plan
 
 
 class UserSerializer(ModelSerializer):
@@ -26,3 +27,16 @@ class UserSerializer(ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
+
+class PlanSerializer(ModelSerializer):
+    """Сериализатор модели Plans."""
+
+    class Meta:
+        model = Plan
+        fields = [
+            'description',
+            'image',
+            'stage',
+            'pdf_file'
+        ]

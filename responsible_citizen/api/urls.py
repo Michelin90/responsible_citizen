@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (TokenBlacklistView,
                                             TokenObtainPairView,
                                             TokenRefreshView)
 
-from .views import EmailConfirmationView, UserViewSet
+from .views import EmailConfirmationView, UserViewSet, PlanVeiw
 
 router = DefaultRouter()
 router.register('users', UserViewSet, basename='users')
@@ -23,4 +23,5 @@ urlpatterns = [
         EmailConfirmationView.as_view(),
         name='email_confirmation'
     ),
+    path('v1/plans/', PlanVeiw.as_view(), name='plans'),
 ]

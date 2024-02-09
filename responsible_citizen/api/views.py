@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
 
-from .serializers import UserSerializer
+from .serializers import UserSerializer, PlanSerializer
+from plans.models import Plan
 from users.utils import confirm_email, send_confirmation_link_to_email
 
 
@@ -54,3 +55,12 @@ class EmailConfirmationView(APIView):
                 {'message': 'Подтверждающая ссылка недействительна'},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+
+class PlanVeiw(APIView):
+    """Класс отображения для работы с моделью PLan"""
+
+    def get(self, request):
+        plans = Plan.objects.all()
+        serializer = PlanSerializer(plans, many=True)
+        return Response(serializer.data)
