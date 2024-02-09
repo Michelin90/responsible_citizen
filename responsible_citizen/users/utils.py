@@ -20,8 +20,7 @@ def create_confirmation_link(user: CustomUser) -> str:
         kwargs={'uidb64': uidb64, 'token': confirmation.token}
     )
     base_url = settings.BASE_URL
-    full_link = urljoin(base_url, confirmation_link)
-    return full_link
+    return urljoin(base_url, confirmation_link)
 
 
 def send_confirmation_link_to_email(user: CustomUser) -> None:

@@ -1,6 +1,6 @@
+from plans.models import Plan, UrgentMessage
 from rest_framework.serializers import ModelSerializer
 from users.models import CustomUser
-from plans.models import Plan
 
 
 class UserSerializer(ModelSerializer):
@@ -35,8 +35,23 @@ class PlanSerializer(ModelSerializer):
     class Meta:
         model = Plan
         fields = [
+            'id',
             'description',
             'image',
             'stage',
-            'pdf_file'
+            'pdf_file',
+            'created_at'
+        ]
+
+
+class UrgentMessageSerializer(ModelSerializer):
+    """Сериализатор модели UrgentMessage."""
+
+    class Meta:
+        model = UrgentMessage
+        fields = [
+            'id',
+            'description',
+            'image',
+            'created_at'
         ]

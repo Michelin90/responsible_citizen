@@ -33,3 +33,24 @@ class Plan(models.Model):
         default=None,
         null=True
     )
+    created_at = models.DateTimeField(
+        verbose_name='Дата публикации',
+        auto_now_add=True
+    )
+
+
+class UrgentMessage(models.Model):
+    """Срочное сообщение."""
+
+    description = models.TextField(verbose_name='Текст сообщения')
+    image = models.ImageField(
+        verbose_name='Изображение к сообщению',
+        upload_to='urgent_messages/images',
+        default=None,
+        null=True,
+        blank=True
+    )
+    created_at = models.DateTimeField(
+        verbose_name='Дата публикации',
+        auto_now_add=True
+    )

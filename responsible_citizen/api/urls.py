@@ -4,10 +4,15 @@ from rest_framework_simplejwt.views import (TokenBlacklistView,
                                             TokenObtainPairView,
                                             TokenRefreshView)
 
-from .views import EmailConfirmationView, UserViewSet, PlanVeiw
+from .views import (EmailConfirmationView, PlanViewSet, UrgentMessageViewSet,
+                    UserViewSet)
 
 router = DefaultRouter()
 router.register('users', UserViewSet, basename='users')
+router.register('plans', PlanViewSet, basename='plans')
+router.register(
+    'urgent_messages', UrgentMessageViewSet, basename='urgent_messages'
+)
 
 urlpatterns = [
     path('v1/', include(router.urls)),
@@ -23,5 +28,4 @@ urlpatterns = [
         EmailConfirmationView.as_view(),
         name='email_confirmation'
     ),
-    path('v1/plans/', PlanVeiw.as_view(), name='plans'),
 ]

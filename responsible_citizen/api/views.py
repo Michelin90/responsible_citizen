@@ -1,13 +1,14 @@
+from plans.models import Plan, UrgentMessage
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import ViewSet
-
-from .serializers import UserSerializer, PlanSerializer
-from plans.models import Plan
+from rest_framework.viewsets import ViewSet, ReadOnlyModelViewSet
 from users.utils import confirm_email, send_confirmation_link_to_email
+
+from .serializers import (PlanSerializer, UrgentMessageSerializer,
+                          UserSerializer)
 
 
 class UserViewSet(ViewSet):
@@ -57,10 +58,15 @@ class EmailConfirmationView(APIView):
             )
 
 
-class PlanVeiw(APIView):
-    """Класс отображения для работы с моделью PLan"""
+class PlanViewSet(ReadOnlyModelViewSet):
+    """Класс отображения для работы с моделью Plan."""
 
-    def get(self, request):
-        plans = Plan.objects.all()
-        serializer = PlanSerializer(plans, many=True)
-        return Response(serializer.data)
+    queryset = Plan.objects.all()
+    serializer_class = PlanSerializer
+
+
+class UrgentMessageViewSet(ReadOnlyModelViewSet):
+    """Класс отображения для работы с моделью UrgentMessage."""
+
+    queryset = UrgentMessage.objects.all()
+    serializer_class = UrgentMessageSerializer
