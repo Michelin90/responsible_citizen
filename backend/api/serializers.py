@@ -1,3 +1,4 @@
+from good_deeds.models import GoodDeed
 from plans.models import Plan, UrgentMessage
 from rest_framework.serializers import ModelSerializer
 from users.models import CustomUser
@@ -55,3 +56,19 @@ class UrgentMessageSerializer(ModelSerializer):
             'image',
             'created_at'
         ]
+
+
+class GoodDeedSerializer(ModelSerializer):
+    """Сериализатор модели GoodDeed."""
+
+    class Meta:
+        model = GoodDeed
+        fields = [
+            'id',
+            'theme',
+            'description',
+            'sender',
+            'stage',
+            'created_at'
+        ]
+        read_only_fields = ['sender']

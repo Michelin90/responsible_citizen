@@ -1,14 +1,16 @@
+from good_deeds.models import GoodDeed
 from plans.models import Plan, UrgentMessage
-from rest_framework import status
+from rest_framework import mixins, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import ViewSet, ReadOnlyModelViewSet
+from rest_framework.viewsets import (GenericViewSet, ReadOnlyModelViewSet,
+                                     ViewSet)
 from users.utils import confirm_email, send_confirmation_link_to_email
 
-from .serializers import (PlanSerializer, UrgentMessageSerializer,
-                          UserSerializer)
+from .serializers import (GoodDeedSerializer, PlanSerializer,
+                          UrgentMessageSerializer, UserSerializer)
 
 
 class UserViewSet(ViewSet):
@@ -70,3 +72,16 @@ class UrgentMessageViewSet(ReadOnlyModelViewSet):
 
     queryset = UrgentMessage.objects.all()
     serializer_class = UrgentMessageSerializer
+
+
+class GoddDeedViewSet(mixins.CreateModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.ListModelMixin,
+                      GenericViewSet):
+    """Класс отображения для работы с моделью GoodDeed."""
+
+    queryset = GoodDeed.objects.all()
+    serializer_class = GoodDeedSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(sender=self.request.user)
